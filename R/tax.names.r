@@ -1,4 +1,4 @@
-
+## Note: this code could be replaced in the future by an import of cleanTaxon.R, adopted and changed from Taxonstand
 # As dBase is an old DOS format, Umlaute  are stored  using a different code table (CP437)
 #    (namely ASCII) than most modern unices (namely ANSI).
 taxname.abbr <- function(x, hybrid = c('ignore', 'TRUE', 'preserve', 'FALSE', 'substitute'), species = FALSE, cf = FALSE, ...) {
@@ -7,10 +7,10 @@ taxname.abbr <- function(x, hybrid = c('ignore', 'TRUE', 'preserve', 'FALSE', 's
   #  loc <- Sys.getlocale(category='LC_CTYPE')
 #  Sys.setlocale("LC_ALL","C")
 #  print('Executing taxname.abbr ...')
-    trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+    trim <- function (x) gsub("^\\s+|\\s+$", "", x) # deleting heading and trailing whitespaces
     x <- trim(x)
-    x <- gsub('\"', '', x)
-    x <- sub('\ ag[.]', ' agg.', x, perl=TRUE, useBytes=TRUE)
+    x <- gsub('\"', '', x) # deleting double quotation marks -  in the following note that gsub replaces all occurences, sub only the first!
+    x <- sub('\ ag[.]', ' agg.', x, perl=TRUE, useBytes=TRUE) # I am not sure why the author set usedBytes = TRUE here. Why should a bytewise comparsion be preferred?
     x <- sub('\ aggr[.]', ' agg.', x, perl=TRUE, useBytes=TRUE)
     x <- sub('\ species group[\ ]', ' agg.', x, perl=TRUE, useBytes=TRUE)
     x <- sub('\ ssp[.]', ' subsp.', x, perl=TRUE, useBytes=TRUE)
@@ -42,7 +42,7 @@ taxname.abbr <- function(x, hybrid = c('ignore', 'TRUE', 'preserve', 'FALSE', 's
     if(hybrid %in% c('preserve', 'FALSE')) {
     }
     if(hybrid == 'substitute') {
-      x <- sub('\ x\ ' , ' \u00d7\ ', x, perl=TRUE, useBytes=TRUE)
+      x <- sub('\ x\ ' , ' \u00d7\ ', x, perl=TRUE, useBytes=TRUE) # \u00d7 is Unicode for the multiplication sign. 
     }
 
     if(cf) x <- sub('^cf.\ ', '', x, ignore.case=TRUE)
@@ -124,18 +124,20 @@ return(x)
 
 TCS.replace <- function(x) {
 ## Turboveg & ## Florkart Germany (BfN lists)
-  x <- replace(x, toupper(x) %in% c('SPECIES_NR', 'TAXNR', 'NAMNR', 'NAMEID', 'TAXONUSAGEID'), 'TaxonUsageID')
+  x <- replace(x, toupper(x) %in% c('SPECIES_NR', 'TAXNR', 'NAMNR', 'NAMEID', 'TAXONUSAGEID'), 'TaxonUsageID')              # ID for this taxon
   x <- replace(x, toupper(x) %in% c('ABBREVIAT','TAXONNAME','TAXON','TAXNAME'), 'TaxonName')
-  x <- replace(x, toupper(x) %in% c('VALID_NR', 'SIPNR', 'NAMNR_GUELT', 'SYNNAMEID', 'TAXONCONCEPTID'), 'TaxonConceptID')
+  x <- replace(x, toupper(x) %in% c('VALID_NR', 'SIPNR', 'NAMNR_GUELT', 'SYNNAMEID', 'TAXONCONCEPTID'), 'TaxonConceptID')   # ID for the valid name, i.e. referrer for all synonymous tax to the correct TaxonUsageID
   x <- replace(x, toupper(x) %in% c('VALID_NAME', 'VALIDNAME', 'TAXONCONCEPT'), 'TaxonConcept')
-  x <- replace(x, toupper(x) %in% c('AGG', 'AGGNR', 'NAMEPARENTID', 'ISCHILDTAXONOFID'), 'IsChildTaxonOfID')
-  x <- replace(x, toupper(x) %in% c('AGG_NAME', 'AGGNAME', 'ISCHILDTAXONOF'), 'IsChildTaxonOf')
+  x <- replace(x, toupper(x) %in% c('AGG', 'AGGNR', 'NAMEPARENTID', 'ISCHILDTAXONOFID'), 'IsChildTaxonOfID')                # aggregate ID, i.e. 
+  x <- replace(x, toupper(x) %in% c('AGG_NAME', 'AGGNAME', 'ISCHILDTAXONOF', 'NAME_CHILD_OF'), 'IsChildTaxonOf')
   x <- replace(x, toupper(x) %in% c('SECUNDUM', 'ACCORDINGTO'), 'AccordingTo')
   x <- replace(x, toupper(x) %in% c('NATIVENAME', "COMMONNAME", 'VERNACULARNAME'), 'VernacularName')
   x <- replace(x, toupper(x) %in% c('CLASSIFICA', 'CLASSIFICATION'), 'Classification')
   x <- replace(x, toupper(x) %in% c('RANG', 'RANK', "TAXONOMICRANK", 'TAXONRANK'), 'TaxonRank')
   x <- replace(x, toupper(x) %in% c('AUTOR', 'AUTHOR'), 'NameAuthor')
 
+  # 
+  
 ## ESveg & FloraEuropaaea
   x <- replace(x, toupper(x) %in% c("TAXONCODE", 'ETAXON'), 'TaxonUsageID')
   x <- replace(x, toupper(x) %in% c('PARENT'), 'IsChildTaxonOfID')

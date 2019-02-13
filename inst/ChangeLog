@@ -1,3 +1,15 @@
+/devl developement branch
+      version 0.9.4.1 February 2019
+        * corrected webpage link for GermanSL download to https://germansl.infinitenature.org/
+        * note for documentation purpose: 
+          the tax.dbf data in GermanSL 1.3 has several column errors:
+          - $AccordingTo does contain a (broken) copy of $VernacularName, without diacritic characters 
+        * note on encodings: several columns are now converted explicitly to UTF-8 using iconv(), 
+          if the corresponding data source dbf would be changed NOT to contain UTF-8 encoded data, this
+          would cause NAs (which are easier to spot than broken char encodings when instead of 
+          iconv() using Encoding(var) <- "UTF-8 "!)
+          
+
 version 0.9.4 and 5 Oktober 2018
   * default directory for GermanSl download changed to concur with CRAN rules
   * problems with CRAN package checks
