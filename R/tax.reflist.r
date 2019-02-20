@@ -38,16 +38,20 @@ load.taxlist <- function(refl, reflist.type = c('Turboveg', 'EDIT'), detailed = 
       }
       
       if(file.exists(reflist.path)) species <- read.dbf(reflist.path, as.is=TRUE) else stop(paste('Reference list file', reflist.path, 'does not exist.'))
-      names(species) <- TCS.replace(names(species))
-      species$TaxonName <- taxname.abbr(..., x = species$TaxonName, hybrid = hybrid)
-      if(detailed) {
+      names(species) <- TCS.replace(names(species)) # replaces several column names, depending on list source. source: tax.names.R
+      species$TaxonName <- taxname.abbr(..., x = species$TaxonName, hybrid = hybrid) # replaces several characters and abbreviations. source: tax.names.R 
+      if(detailed) { # i.e. if tax.dbf is loaded
         species$TaxonConcept <- taxname.abbr( ..., x=species$TaxonConcept, hybrid = hybrid)
-        if('VernacularName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$VernacularName <- iconv(species$VernacularName, from='UTF8', to='')
-        if('Author' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$AUTHOR <- iconv(species$AUTHOR, from='UTF8', to='')
-      }  else {
-        if('VernacularName' %in% names(species)& Sys.info()['sysname'] != 'SunOS') species$VernacularName <- iconv(species$VernacularName, from='CP437', to='')
-        if('Author' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$AUTHOR <- iconv(species$AUTHOR, from='CP437', to='') # CP850
-      }
+        if('VernacularName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$VernacularName <- iconv(species$VernacularName, from='CP437', to='UTF-8') # possible also: to = '' on windows locale 1252, ISO-8859-1
+        if('NameAuthor' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$NameAuthor <- iconv(species$NameAuthor, from='CP437', to='UTF-8')
+        if('AccordingTo' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$AccordingTo <- iconv(species$AccordingTo, from='CP437', to='UTF-8') # NB: col is broken in v.1.3 tax.dbf data source!
+        if('TaxonName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonName <- iconv(species$TaxonName, from='UTF-8', to='UTF-8') # of course this is col is present!
+        if('NACHWEIS' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$NACHWEIS <- iconv(species$NACHWEIS, from='UTF-8', to='UTF-8') # 
+        if('BEGRUEND' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$BEGRUEND <- iconv(species$BEGRUEND, from='UTF-8', to='UTF-8') # 
+         }  else { # i.e. if species.dbf is loaded - legacy code?
+        if('VernacularName' %in% names(species)& Sys.info()['sysname'] != 'SunOS') species$VernacularName <- iconv(species$VernacularName, from='CP437', to='UTF-8') # alternatively from = ''?
+        if('TaxonName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonName <- iconv(species$TaxonName, from='UTF-8', to='UTF-8')
+        }
       if(refl %in% supportedReflists && detailed==FALSE) species <- species[,c('TaxonUsageID','LETTERCODE','TaxonName', 'VernacularName','SYNONYM', 'TaxonConceptID')] else {
         include <- !names(species) %in% c('SHORTNAME')
         species <- species[, include]
