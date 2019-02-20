@@ -20,6 +20,12 @@ License: GPL (>= 2)
 URL: http://germansl.infinitenature.org
 RoxygenNote: 6.1.0
 NeedsCompilation: no
+<<<<<<< HEAD
 Packaged: 2019-00-00 00:00:00 UTC; arne1921KF
 Repository: arne1921KF/vegdata@devl
 Date/Publication: 2019-02-20 00:00:00 UTC
+=======
+Packaged: 2019-00-00 00:00:00 UTC; jansen
+Repository: CRAN
+Date/Publication: 2019-00-00 00:00:00 UTC
+>>>>>>> 721306588cc5b60ae89aaccbdf3de62f2f1e485c
