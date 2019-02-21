@@ -48,6 +48,16 @@ load.taxlist <- function(refl, reflist.type = c('Turboveg', 'EDIT'), detailed = 
         if('TaxonName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonName <- iconv(species$TaxonName, from='UTF-8', to='UTF-8') # of course this is col is present!
         if('NACHWEIS' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$NACHWEIS <- iconv(species$NACHWEIS, from='UTF-8', to='UTF-8') # 
         if('BEGRUEND' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$BEGRUEND <- iconv(species$BEGRUEND, from='UTF-8', to='UTF-8') # 
+          if(refl == "GermanSL 1.3") {
+          # load germanSL 1.4, replace AccordingTo with AccordingTo (or SECUNDUM, respectively)
+          # TO BE RUN OUTSIDE OF FUNCTION IN PRODUCTIVE CODE   
+            # secundum <- load.taxlist("GermanSL 1.4", detailed=TRUE) %>% #using the most recent German SL version here!
+            # select(TaxonUsageID, TaxonConceptID, AccordingTo) 
+            # tax_dbf <- tax_dbf %>%
+            #   select(-AccordingTo) %>% 
+            #   left_join(secundum, by=c("TaxonUsageID", "TaxonConceptID"))
+            # rm(secundum)
+          } 
          }  else { # i.e. if species.dbf is loaded - legacy code?
         if('VernacularName' %in% names(species)& Sys.info()['sysname'] != 'SunOS') species$VernacularName <- iconv(species$VernacularName, from='CP437', to='UTF-8') # alternatively from = ''?
         if('TaxonName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonName <- iconv(species$TaxonName, from='UTF-8', to='UTF-8')
@@ -62,7 +72,7 @@ load.taxlist <- function(refl, reflist.type = c('Turboveg', 'EDIT'), detailed = 
   	
    return(species)
 }
-
+# Note: Since AccordingTo it broken in GermanSL 1.3, it should be replaced with data from GermanSL 1.4. This means loading the v1.4 as well!
 
 tv.refl <- function(refl, db, tv_home) {
 #   capwords <- function(s, strict = FALSE) {
