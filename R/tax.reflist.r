@@ -47,7 +47,8 @@ load.taxlist <- function(refl, reflist.type = c('Turboveg', 'EDIT'), detailed = 
         if('AccordingTo' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$AccordingTo <- iconv(species$AccordingTo, from='CP437', to='UTF-8') # NB: col is broken in v.1.3 tax.dbf data source!
         if('TaxonName' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonName <- iconv(species$TaxonName, from='UTF-8', to='UTF-8') # of course this is col is present!
         if('NACHWEIS' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$NACHWEIS <- iconv(species$NACHWEIS, from='UTF-8', to='UTF-8') # 
-        if('BEGRUEND' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$BEGRUEND <- iconv(species$BEGRUEND, from='UTF-8', to='UTF-8') # 
+        if('BEGRUEND' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$BEGRUEND <- iconv(species$BEGRUEND, from='UTF-8', to='UTF-8') #
+        if('TaxonConcept' %in% names(species) & Sys.info()['sysname'] != 'SunOS') species$TaxonConcept <- iconv(species$TaxonConcept, from='UTF-8', to='UTF-8') # cf. Persicaria × condensata
           if(refl == "GermanSL 1.3") {
           # load germanSL 1.4, replace AccordingTo with AccordingTo (or SECUNDUM, respectively)
           # TO BE RUN OUTSIDE OF FUNCTION IN PRODUCTIVE CODE   
